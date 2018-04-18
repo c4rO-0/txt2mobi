@@ -8,35 +8,38 @@ import socket
 import SimpleHTTPServer
 import SocketServer
 from exceptions import KindleGenNotInstalledError
+from main import Txt2mobiPath
 
 
+# def current_working_dir():
+#     return os.getcwd()
 
-def current_working_dir():
-    return os.getcwd()
 
-
-def init_project():
+def init_project(working_dir, fileName):
     book_name = ''
-    dir_path = current_working_dir()
-    onlyfiles = [f for f in os.listdir(dir_path) if f.endswith('txt')]
+    dir_path = working_dir
+    onlyfiles = fileName
     for file_name in onlyfiles:
         book_name = file_name.split('.')[0]
     rows = []
     rows.append(u'[txt2mobi]')
-    rows.append(u'kindlegen=kindlegen')
+    rows.append(u'kindlegen=' + os.path.join(Txt2mobiPath,'resources','kindlegen'))
     rows.append(u'')
     rows.append(u'[book]')
     rows.append(u'cover-img=cover.png')
     rows.append(u'title=%s' % book_name.decode('utf8'))
-    rows.append(u'author=作者')
+    rows.append(u'author=c4r')
     rows.append(u'max-chapter=1500')
-    with open(os.path.join(current_working_dir(), '.project.ini'), 'w') as f:
+    with open(os.path.join(working_dir, '.project.ini'), 'w') as f:
         f.write("\n".join([r.encode('utf8') for r in rows]))
         f.close()
-    r = requests.get('https://raw.githubusercontent.com/ipconfiger/txt2mobi/master/resources/cover.png')
-    with open(os.path.join(current_working_dir(), 'cover.png'), 'w') as f:
-        f.write(r.content)
-        f.close()
+
+    # 复制封面
+    os.system("cp " + os.path.join(Txt2mobiPath,'resources','cover.png') + " " + working_dir)
+    # r = requests.get('https://raw.githubusercontent.com/ipconfiger/txt2mobi/master/resources/cover.png')
+    # with open(os.path.join(current_working_dir(), 'cover.png'), 'w') as f:
+    #     f.write(r.content)
+    #     f.close()
 
 
 def check_kindlgen(command='kindlegen'):

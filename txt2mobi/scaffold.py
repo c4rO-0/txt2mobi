@@ -4,18 +4,18 @@ import os
 import sys
 import shutil
 from txt2mobi.exceptions import EncodingError
-from utilities import current_working_dir, init_project
+from utilities import init_project
 from txt2html import Book
 
 
 
-def op_init_project():
-    """
-    初始化项目目录
-    :return:
-    :rtype:
-    """
-    init_project()
+# def op_init_project():
+#     """
+#     初始化项目目录
+#     :return:
+#     :rtype:
+#     """
+#     init_project()
 
 
 def generate_project(title):
