@@ -33,9 +33,9 @@ def clear_line(line):
 
 
 def unicode_line(file_content):
-    print "正在识别文件字符集..."
+    print("正在识别文件字符集...")
     coding = codeTrans(get_coding(file_content[:500]))
-    print "文件字符集:", coding
+    print("文件字符集:", coding)
     lines = file_content.split('\n')
     result_lines = []
     error_lines = 0
@@ -45,7 +45,7 @@ def unicode_line(file_content):
         except Exception as e:
             error_lines += 1
     if error_lines:
-        print u"有%s行无法解析" % error_lines
+        print(u"有%s行无法解析" % error_lines)
     return result_lines
 
 
@@ -70,7 +70,7 @@ class Chapter(object):
         for line in self.lines:
             rows.append("    <p>%s</p>" % line.encode('utf8'))
         rows.append("    <mbp:pagebreak />")
-        print "章节", self.title, "生成完毕"
+        print("章节", self.title, "生成完毕")
         return "\n".join(rows)
 
     def as_ncx(self, idx):
@@ -84,7 +84,7 @@ class Chapter(object):
             </navLabel>
             <content src="book-%(book_idx)s.html#ch%(idx)s" />
         </navPoint>""" % dict(idx=self.idx, title=self.title.encode('utf8'), book_idx=idx)
-        print "章节索引", self.title, "生成完毕"
+        print("章节索引", self.title, "生成完毕")
         return ncx
 
 
