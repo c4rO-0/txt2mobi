@@ -30,7 +30,7 @@ def generate_project(title,working_dir):
         for idx in range(1, book_count + 1):
             os.system(book.gen_command(idx))
             src_path = os.path.join(working_dir, 'project-%s.mobi' % idx)
-            des_path = os.path.join(working_dir, '%s-%s.mobi' % (book.name.encode('utf8'), idx))
+            des_path = os.path.join(working_dir, '%s-%s.mobi' % (book.name, idx))
 
 
 

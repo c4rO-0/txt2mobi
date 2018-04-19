@@ -2,11 +2,11 @@
 
 import os
 import sys
-import requests
-import ConfigParser
+# import requests
+import configparser
 import socket
-import SimpleHTTPServer
-import SocketServer
+import http.server
+import socketserver
 from exceptions import KindleGenNotInstalledError
 from main import Txt2mobiPath
 
@@ -18,20 +18,19 @@ from main import Txt2mobiPath
 def init_project(working_dir, fileName):
     book_name = ''
     dir_path = working_dir
-    onlyfiles = fileName
-    for file_name in onlyfiles:
-        book_name = file_name.split('.')[0]
+
+    book_name = fileName.split('.')[0]
     rows = []
     rows.append(u'[txt2mobi]')
     rows.append(u'kindlegen=' + os.path.join(Txt2mobiPath,'resources','kindlegen'))
     rows.append(u'')
     rows.append(u'[book]')
     rows.append(u'cover-img=cover.png')
-    rows.append(u'title=%s' % book_name.decode('utf8'))
+    rows.append(u'title=%s' % book_name)
     rows.append(u'author=c4r')
     rows.append(u'max-chapter=1500')
     with open(os.path.join(working_dir, '.project.ini'), 'w') as f:
-        f.write("\n".join([r.encode('utf8') for r in rows]))
+        f.write("\n".join([r for r in rows]))
         f.close()
 
     # 复制封面
@@ -54,7 +53,7 @@ class ProjectConfig(object):
             self.cf = ConfigParser.ConfigParser()
             self.cf.read(file_path)
         except Exception:
-            print "当前目录未初始化"
+            print("当前目录未初始化")
             sys.exit(1)
 
 
@@ -68,11 +67,11 @@ class ProjectConfig(object):
 
     @property
     def title(self):
-        return self.cf.get('book', 'title').decode('utf8')
+        return self.cf.get('book', 'title')
 
     @property
     def author(self):
-        return self.cf.get('book', 'author').decode('utf8')
+        return self.cf.get('book', 'author')
 
     @property
     def max_chapter(self):
@@ -122,6 +121,6 @@ def start_server():
     PORT = 8000
     Handler = SimpleHTTPServer.SimpleHTTPRequestHandler
     httpd = SocketServer.TCPServer(("", PORT), Handler)
-    print "打开Kindle:体验版网页浏览器, 输入http://%s:8000 点击project.mobi下载" % getIp()
+    print("打开Kindle:体验版网页浏览器, 输入http://%s:8000 点击project.mobi下载" % getIp())
     httpd.serve_forever()
 

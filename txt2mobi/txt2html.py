@@ -34,14 +34,14 @@ def clear_line(line):
 
 def unicode_line(file_content):
     print("正在识别文件字符集...")
-    coding = codeTrans(get_coding(file_content[:500]))
-    print("文件字符集:", coding)
+    # coding = codeTrans(get_coding(file_content[:500]))
+    # print("文件字符集:", coding)
     lines = file_content.split('\n')
     result_lines = []
     error_lines = 0
     for idx, line in enumerate(lines):
         try:
-            result_lines.append(clear_line(line.decode(coding)))
+            result_lines.append(clear_line(line))
         except Exception as e:
             error_lines += 1
     if error_lines:
@@ -66,9 +66,9 @@ class Chapter(object):
     def as_html(self):
         if len(self.lines) < 1:
             return ""
-        rows = ["    <a name=\"ch%s\"/><h3 id=\"ch%s\">%s</h3>" % (self.idx, self.idx, self.title.encode('utf8'))]
+        rows = ["    <a name=\"ch%s\"/><h3 id=\"ch%s\">%s</h3>" % (self.idx, self.idx, self.title)]
         for line in self.lines:
-            rows.append("    <p>%s</p>" % line.encode('utf8'))
+            rows.append("    <p>%s</p>" % line)
         rows.append("    <mbp:pagebreak />")
         print("章节", self.title, "生成完毕")
         return "\n".join(rows)
@@ -83,7 +83,7 @@ class Chapter(object):
                 </text>
             </navLabel>
             <content src="book-%(book_idx)s.html#ch%(idx)s" />
-        </navPoint>""" % dict(idx=self.idx, title=self.title.encode('utf8'), book_idx=idx)
+        </navPoint>""" % dict(idx=self.idx, title=self.title, book_idx=idx)
         print("章节索引", self.title, "生成完毕")
         return ncx
 
@@ -214,7 +214,7 @@ class Book(object):
     <div class="pagebreak"></div>
         """ % "\n".join(["            <li><a href=\"#ch%s\">%s</a></li>" % (
             chapter.idx,
-            chapter.title.encode('utf8')) for chapter in self.chapters[start: end] if chapter.lines])
+            chapter.title) for chapter in self.chapters[start: end] if chapter.lines])
         return menu_base
 
     def gen_html_file(self, idx):
@@ -225,7 +225,7 @@ class Book(object):
         """
         menu = self.gen_menu(idx)
         start, end = self.__start_end_of_index(idx)
-        book_name = config.title.encode('utf8')
+        book_name = config.title
         contents = "\n".join([chapter.as_html() for chapter in self. chapters[start: end]])
 
         data = dict(book_name=book_name, menu=menu, content=contents)
@@ -264,7 +264,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
         """
         start, end = self.__start_end_of_index(idx)
         data = dict(
-            book_name=config.title.encode('utf8'),
+            book_name=config.title,
             menavPoints="\n".join([chapter.as_ncx(idx) for chapter in self.chapters[start: end]])
         )
         ncx_base = """<?xml version="1.0"?>
@@ -320,9 +320,9 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
     </guide>
 </package>
         """ % dict(
-            title_name=u"目录".encode('utf8'),
-            author=config.author.encode('utf8'),
-            title="%s-%s" % (config.title.encode('utf8'), idx) if self.book_count() > 1 else config.title.encode('utf8'),
+            title_name=u"目录",
+            author=config.author,
+            title="%s-%s" % (config.title, idx) if self.book_count() > 1 else config.title,
             cover=config.cover_image,
             idx="%s" % idx
         )
