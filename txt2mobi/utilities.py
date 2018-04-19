@@ -18,7 +18,8 @@ from main import Txt2mobiPath
 def init_project(working_dir, fileName):
     book_name = ''
     dir_path = working_dir
-
+    print("working---->")
+    print(working_dir)
     book_name = fileName.split('.')[0]
     rows = []
     rows.append(u'[txt2mobi]')
@@ -34,6 +35,7 @@ def init_project(working_dir, fileName):
         f.close()
 
     # 复制封面
+    
     os.system("cp " + os.path.join(Txt2mobiPath,'resources','cover.png') + " " + working_dir)
     # r = requests.get('https://raw.githubusercontent.com/ipconfiger/txt2mobi/master/resources/cover.png')
     # with open(os.path.join(current_working_dir(), 'cover.png'), 'w') as f:
