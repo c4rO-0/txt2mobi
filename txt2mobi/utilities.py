@@ -48,9 +48,9 @@ def check_kindlgen(command='kindlegen'):
         raise KindleGenNotInstalledError()
 
 class ProjectConfig(object):
-    def __init__(self):
+    def __init__(self,working_dir):
         try:
-            file_path = os.path.join(current_working_dir(), '.project.ini')
+            file_path = os.path.join(working_dir, '.project.ini')
             self.cf = ConfigParser.ConfigParser()
             self.cf.read(file_path)
         except Exception:
