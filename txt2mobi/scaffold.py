@@ -18,34 +18,33 @@ from txt2html import Book
 #     init_project()
 
 
-def generate_project(title,working_dir):
+def generate_project(title,working_dir,filename):
     """
     生成项目文件
     :return:
     :rtype:
     """
-    book = test_project(title,working_dir)
+    book = test_project(title,working_dir,filename)
     if(book != None):
         book_count = book.book_count()
         for idx in range(1, book_count + 1):
             os.system(book.gen_command(idx))
             src_path = os.path.join(working_dir, 'project-%s.mobi' % idx)
-            des_path = os.path.join(working_dir, '%s-%s.mobi' % (book.name, idx))
+            des_path = os.path.join(working_dir, '%s-%s.mobi' % (book.config.title, idx))
 
 
 
-def test_project(title,working_dir):
+def test_project(title,working_dir,filename):
     """
     测试项目, 跑一遍, 生成文件但是不调用kindlegen
     :return:
     :rtype:
     """
-    dir_path = working_dir
-    onlyfiles = [os.path.join(dir_path, f) for f in os.listdir(dir_path) if f.endswith('txt')]
-    for file_path in onlyfiles:
-        book = Book(file_path, title)
-        book.trim()
-        break
+    print("-----开始测试---------")
+    book = Book(working_dir, filename, title)
+    print("------去掉空章节--------")
+    book.trim()
+    print("-------生成opf------")
     # 生成opf文件
     book_count = book.book_count()
     for idx in range(1, book_count+1):

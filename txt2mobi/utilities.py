@@ -52,7 +52,7 @@ class ProjectConfig(object):
     def __init__(self,working_dir):
         try:
             file_path = os.path.join(working_dir, '.project.ini')
-            self.cf = ConfigParser.ConfigParser()
+            self.cf = configparser.ConfigParser()
             self.cf.read(file_path)
         except Exception:
             print("当前目录未初始化")
@@ -121,8 +121,8 @@ def start_server():
     :rtype:
     """
     PORT = 8000
-    Handler = SimpleHTTPServer.SimpleHTTPRequestHandler
-    httpd = SocketServer.TCPServer(("", PORT), Handler)
+    Handler = http.server.SimpleHTTPRequestHandler
+    httpd = socketserver.TCPServer(("", PORT), Handler)
     print("打开Kindle:体验版网页浏览器, 输入http://%s:8000 点击project.mobi下载" % getIp())
     httpd.serve_forever()
 

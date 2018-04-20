@@ -1,22 +1,28 @@
 # coding=utf8
 
 import chardet
+import codecs 
 import re
 from utilities import codeTrans, ProjectConfig, no_html
+import os
+from math import ceil
 
 
-config = ProjectConfig()
 
 allowed = [u',', u'.', u"!", u"?", u":", u"*", u"[", u"]", u";", u"-", u"_", u"。", u"，", u"?", u"：",
            u"；", u"【", u"】", u" ", u""]
 
 english = u'qazxswedcvfrtgbnhyujmkiolpQAZXSWEDCVFRTGBNHYUJMKIOLP1234567890'
 
-def get_coding(file_content):
-    result = chardet.detect(file_content)
-    if result.get('confidence') > 0.8:
-        return result.get('encoding')
-    return 'utf-8'
+# 获取文件编码类型  
+def get_encoding(file):  
+    # 二进制方式读取，获取字节数据，检测类型  
+    
+    with open(file, 'rb') as f:  
+        for line in f:
+            if(len(line) > 10 ):
+                print(chardet.detect(line))
+                return chardet.detect(line)['encoding']  
 
 
 def clear_line(line):
@@ -92,14 +98,22 @@ class Book(object):
     """
     书对象
     """
-    def __init__(self, file_path, title_filter):
-        with open(file_path, 'r') as f:
+    def __init__(self, working_dir, filename, title_filter):
+        print("------生成config--------")
+        config = ProjectConfig(working_dir)
+        print("-------统计行数-------")
+        print(os.path.join(working_dir , filename))  
+        print("-------打开-------")
+        with open(os.path.join(working_dir , filename), 'r', encoding='UTF-8') as f:
+            print("-------unicode-------")
             lines = unicode_line(f.read())
             f.close()
+        print("--------初始化参量------")
         self.title_filter = title_filter
         self.chapters = []
         self.process_lines(lines)
-        self.name = config.title
+        self.config = config
+        print("-------初始化结束-------")
 
     def trim(self):
         """
@@ -117,12 +131,9 @@ class Book(object):
         :return:
         :rtype:
         """
-        ct = len(self.chapters) / int(config.max_chapter)
-        md = len(self.chapters) / int(config.max_chapter)
-        if md > 0:
-            ct += 1
-        if ct + md == 0:
-            ct = 1
+        # 向上取整
+        ct = ceil(len(self.chapters) / self.config.max_chapter)
+
         return ct
 
     def __start_end_of_index(self, idx):
@@ -133,8 +144,8 @@ class Book(object):
         :return:
         :rtype:
         """
-        start = (idx - 1) * int(config.max_chapter)
-        end = idx * int(config.max_chapter)
+        start = (idx - 1) * int(self.config.max_chapter)
+        end = idx * int(self.config.max_chapter)
         return start, end
 
     def __is_chapter_title(self, line):
@@ -225,7 +236,7 @@ class Book(object):
         """
         menu = self.gen_menu(idx)
         start, end = self.__start_end_of_index(idx)
-        book_name = config.title
+        book_name = self.config.title
         contents = "\n".join([chapter.as_html() for chapter in self. chapters[start: end]])
 
         data = dict(book_name=book_name, menu=menu, content=contents)
@@ -264,7 +275,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
         """
         start, end = self.__start_end_of_index(idx)
         data = dict(
-            book_name=config.title,
+            book_name=self.config.title,
             menavPoints="\n".join([chapter.as_ncx(idx) for chapter in self.chapters[start: end]])
         )
         ncx_base = """<?xml version="1.0"?>
@@ -321,9 +332,9 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 </package>
         """ % dict(
             title_name=u"目录",
-            author=config.author,
-            title="%s-%s" % (config.title, idx) if self.book_count() > 1 else config.title,
-            cover=config.cover_image,
+            author=self.config.author,
+            title="%s-%s" % (self.config.title, idx) if self.book_count() > 1 else self.config.title,
+            cover=self.config.cover_image,
             idx="%s" % idx
         )
         return opf_file
@@ -336,4 +347,4 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
         :return:
         :rtype:
         """
-        return "%s project-%s.opf" % (config.gen_command.encode('utf'), idx)
+        return "%s project-%s.opf" % (self.config.gen_command.encode('utf'), idx)
