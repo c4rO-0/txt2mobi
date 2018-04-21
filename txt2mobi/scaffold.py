@@ -89,12 +89,12 @@ def genTOC(title,working_dir,filename):
     book_count = book.book_count()
     TOC = []
     
+    index =0
     for idx in range(1, book_count+1):
-        index =0
         try:
             # 生成目录
             for chapter in book.chapters:
-                TOC.append([idx, index, chapter.title])
+                TOC.append([index, chapter.title])
                 index = index +1
 
         except (EncodingError):
@@ -102,3 +102,38 @@ def genTOC(title,working_dir,filename):
             return None, None
     return book, TOC
 
+def gen_project(book,title,working_dir,filename):
+    """
+    测试项目, 跑一遍, 生成文件但是不调用kindlegen
+    :return:
+    :rtype:
+    """
+    print("-----开始测试---------")
+    print("-------生成opf------")
+    # 生成opf文件
+    book_count = book.book_count()
+    for idx in range(1, book_count+1):
+        try:
+            opf_path = os.path.join(working_dir, 'project-%s.opf' % idx)
+            with open(opf_path, 'w') as f:
+                f.write(book.gen_opf_file(idx))
+                f.close()
+            print("opf文件生成完毕")
+
+            # 生成ncx文件
+            ncx_path = os.path.join(working_dir, 'toc-%s.ncx' % idx)
+            with open(ncx_path, 'w') as f:
+                f.write(book.gen_ncx(idx))
+                f.close()
+            print("ncx文件生成完毕")
+
+            # 生成book.html
+            book_path = os.path.join(working_dir, 'book-%s.html' % idx)
+            with open(book_path, 'w') as f:
+                f.write(book.gen_html_file(idx))
+                f.close()
+            print("book-%s.html生成完毕" % idx)
+        except (EncodingError):
+            print("文件编码异常无法解析,请尝试用iconv来转码成utf8后再试,或者提交issuse")
+            return None
+    return book

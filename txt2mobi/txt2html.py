@@ -349,3 +349,24 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
         :rtype:
         """
         return "%s %sproject-%s.opf" % (self.config.gen_command, self.config.working_dir+ os.sep, idx)
+
+    def combineChapter(self, index):
+        """
+        将index里的chapter和之前的章节合并
+        """
+        sortIndex = sorted(index) # 从大到小排序
+        for delIndex in sortIndex:
+            if(len( self.chapters) > 0 and delIndex != 0):
+                self.chapters[delIndex-1].append_line(self.chapters[delIndex].title)
+                self.chapters[delIndex-1].lines.extend(self.chapters[delIndex].lines)
+
+                # 修改标号
+                for chapter in self.chapters[delIndex+1:]:
+                    chapter.idx = chapter.idx-1
+                    
+                # pop
+                self.chapters.pop(delIndex)
+                
+                    
+        
+            
