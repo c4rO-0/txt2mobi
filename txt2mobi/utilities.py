@@ -51,6 +51,7 @@ def check_kindlgen(command='kindlegen'):
 class ProjectConfig(object):
     def __init__(self,working_dir):
         try:
+            self.working_dir = working_dir
             file_path = os.path.join(working_dir, '.project.ini')
             self.cf = configparser.ConfigParser()
             self.cf.read(file_path)

@@ -111,7 +111,8 @@ class Book(object):
         print("--------初始化参量------")
         self.title_filter = title_filter
         self.chapters = []
-        self.process_lines(lines)
+        # 找到章节
+        self.process_lines(lines) 
         self.config = config
         print("-------初始化结束-------")
 
@@ -347,4 +348,4 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
         :return:
         :rtype:
         """
-        return "%s project-%s.opf" % (self.config.gen_command.encode('utf'), idx)
+        return "%s %sproject-%s.opf" % (self.config.gen_command, self.config.working_dir+ os.sep, idx)

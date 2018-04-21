@@ -28,6 +28,8 @@ def generate_project(title,working_dir,filename):
     if(book != None):
         book_count = book.book_count()
         for idx in range(1, book_count + 1):
+            print('--------生成执行命令-------------')
+            print(book.gen_command(idx))
             os.system(book.gen_command(idx))
             src_path = os.path.join(working_dir, 'project-%s.mobi' % idx)
             des_path = os.path.join(working_dir, '%s-%s.mobi' % (book.config.title, idx))
@@ -73,5 +75,30 @@ def test_project(title,working_dir,filename):
             return None
     return book
 
+def genTOC(title,working_dir,filename):
+    """
+    只生成ncx文件
+    :return:
+    :rtype:
+    """
+    print("-----开始TOC---------")
+    book = Book(working_dir, filename, title)
+    print("------去掉空章节--------")
+    book.trim()
+    # 生成opf文件
+    book_count = book.book_count()
+    TOC = []
+    
+    for idx in range(1, book_count+1):
+        index =0
+        try:
+            # 生成目录
+            for chapter in book.chapters:
+                TOC.append([idx, index, chapter.title])
+                index = index +1
 
+        except (EncodingError):
+            print("文件编码异常无法解析,请尝试用iconv来转码成utf8后再试,或者提交issuse")
+            return None, None
+    return book, TOC
 
