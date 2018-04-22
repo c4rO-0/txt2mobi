@@ -90,16 +90,24 @@ def genTOC(title,working_dir,filename):
     TOC = []
     
     index =0
-    for idx in range(1, book_count+1):
-        try:
-            # 生成目录
-            for chapter in book.chapters:
-                TOC.append([index, chapter.title])
-                index = index +1
 
-        except (EncodingError):
-            print("文件编码异常无法解析,请尝试用iconv来转码成utf8后再试,或者提交issuse")
-            return None, None
+    try:
+        # 生成目录
+        for chapter in book.chapters:
+            TOC.append([index, chapter.title])
+            print( chapter.title)
+            index = index +1
+
+    except (EncodingError):
+        print("文件编码异常无法解析,请尝试用iconv来转码成utf8后再试,或者提交issuse")
+        return None, None
+
+    TOChtml_path = os.path.join(working_dir, 'project-TOC.html')
+    with open(TOChtml_path, 'w') as f:
+        f.write(book.gen_TOChtml())
+        f.close()
+    
+
     return book, TOC
 
 def gen_project(book,title,working_dir,filename):

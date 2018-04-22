@@ -93,6 +93,13 @@ class Chapter(object):
         print("章节索引", self.title, "生成完毕")
         return ncx
 
+    def as_TOChtml(self):
+        if len(self.lines) < 1:
+            return ""
+        TOChtml = """      <p id="ch%(idx)s" playOrder="%(idx)s">
+                    %(title)s
+        </p>""" % dict(idx=self.idx, title=self.title)
+        return TOChtml
 
 class Book(object):
     """
@@ -368,5 +375,13 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                 self.chapters.pop(delIndex)
                 
                     
-        
+    def gen_TOChtml(self):
+        """
+        生成TOC html文件内容
+        :return:
+        :rtype:
+        """
+        menavPoints="\n".join([ chapter.as_TOChtml() for chapter in self.chapters ])
+
+        return menavPoints        
             
