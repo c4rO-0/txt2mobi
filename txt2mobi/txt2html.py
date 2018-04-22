@@ -96,7 +96,7 @@ class Chapter(object):
     def as_TOChtml(self):
         if len(self.lines) < 1:
             return ""
-        TOChtml = """      <p id="ch%(idx)s" playOrder="%(idx)s">
+        TOChtml = """      <p id="ch%(idx)s" index="%(idx)s" del="">
                     %(title)s
         </p>""" % dict(idx=self.idx, title=self.title)
         return TOChtml
