@@ -83,19 +83,21 @@ def genTOC(title,working_dir,filename):
     """
     print("-----开始TOC---------")
     book = Book(working_dir, filename, title)
-    print("------去掉空章节--------")
-    book.trim()
+    # print("------去掉空章节--------")
+    # book.trim()
     # 生成opf文件
     book_count = book.book_count()
     TOC = []
     
     index =0
-
+    print("----genTOC-----")
+    print(book.chapters[0].title)
+    print("----title-----")
     try:
         # 生成目录
         for chapter in book.chapters:
             TOC.append([index, chapter.title])
-            # print( chapter.title)
+            print( chapter.title)
             index = index +1
 
     except (EncodingError):

@@ -70,8 +70,8 @@ class Chapter(object):
         self.lines.append(line)
 
     def as_html(self):
-        if len(self.lines) < 1:
-            return ""
+        # if len(self.lines) < 1:
+        #     return ""
         rows = ["    <a name=\"ch%s\"/><h3 id=\"ch%s\">%s</h3>" % (self.idx, self.idx, self.title)]
         for line in self.lines:
             rows.append("    <p>%s</p>" % line)
@@ -80,8 +80,8 @@ class Chapter(object):
         return "\n".join(rows)
 
     def as_ncx(self, idx):
-        if len(self.lines) < 1:
-            return ""
+        # if len(self.lines) < 1:
+        #     return ""
         ncx = """      <navPoint id="ch%(idx)s" playOrder="%(idx)s">
             <navLabel>
                 <text>
@@ -94,8 +94,6 @@ class Chapter(object):
         return ncx
 
     def as_TOChtml(self):
-        if len(self.lines) < 1:
-            return ""
         TOChtml = """      <p id="ch%(idx)s" index="%(idx)s" del="">
                     %(title)s
         </p>""" % dict(idx=self.idx, title=self.title)
@@ -213,6 +211,8 @@ class Book(object):
             else:
                 if len(line.strip()):
                     chapter.append_line(line)
+        print("----process_lines-----")
+        print(self.chapters[0].title)
 
     def gen_menu(self, idx):
         """
@@ -233,7 +233,7 @@ class Book(object):
     <div class="pagebreak"></div>
         """ % "\n".join(["            <li><a href=\"#ch%s\">%s</a></li>" % (
             chapter.idx,
-            chapter.title) for chapter in self.chapters[start: end] if chapter.lines])
+            chapter.title) for chapter in self.chapters[start: end]])
         return menu_base
 
     def gen_html_file(self, idx):
