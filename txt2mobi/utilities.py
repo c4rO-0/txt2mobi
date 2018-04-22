@@ -9,7 +9,7 @@ import http.server
 import socketserver
 from exceptions import KindleGenNotInstalledError
 from main import Txt2mobiPath
-
+import shutil
 
 # def current_working_dir():
 #     return os.getcwd()
@@ -35,8 +35,8 @@ def init_project(working_dir, fileName):
         f.close()
 
     # 复制封面
-    
-    os.system("cp " + os.path.join(Txt2mobiPath,'resources','cover.png') + " " + working_dir)
+    shutil.copy2(os.path.join(Txt2mobiPath,'resources','cover.png'),working_dir)
+    # os.system("cp " + os.path.join(Txt2mobiPath,'resources','cover.png') + " " + working_dir)
     # r = requests.get('https://raw.githubusercontent.com/ipconfiger/txt2mobi/master/resources/cover.png')
     # with open(os.path.join(current_working_dir(), 'cover.png'), 'w') as f:
     #     f.write(r.content)

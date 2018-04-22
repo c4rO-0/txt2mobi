@@ -95,7 +95,7 @@ def genTOC(title,working_dir,filename):
         # 生成目录
         for chapter in book.chapters:
             TOC.append([index, chapter.title])
-            print( chapter.title)
+            # print( chapter.title)
             index = index +1
 
     except (EncodingError):
