@@ -76,7 +76,7 @@ class Chapter(object):
         for line in self.lines:
             rows.append("    <p>%s</p>" % line)
         rows.append("    <mbp:pagebreak />")
-        print("章节", self.title, "生成完毕")
+        # print("章节", self.title, "生成完毕")
         return "\n".join(rows)
 
     def as_ncx(self, idx):
@@ -90,7 +90,7 @@ class Chapter(object):
             </navLabel>
             <content src="book-%(book_idx)s.html#ch%(idx)s" />
         </navPoint>""" % dict(idx=self.idx, title=self.title, book_idx=idx)
-        print("章节索引", self.title, "生成完毕")
+        # print("章节索引", self.title, "生成完毕")
         return ncx
 
     def as_TOChtml(self):
@@ -361,9 +361,11 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
         """
         将index里的chapter和之前的章节合并
         """
-        sortIndex = sorted(index) # 从大到小排序
+        # print('------del----------')
+        sortIndex = sorted(index,reverse =True) # 从大到小排序
         for delIndex in sortIndex:
             if(len( self.chapters) > 0 and delIndex != 0):
+                # print(delIndex)
                 self.chapters[delIndex-1].append_line(self.chapters[delIndex].title)
                 self.chapters[delIndex-1].lines.extend(self.chapters[delIndex].lines)
 
