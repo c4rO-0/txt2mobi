@@ -21,8 +21,9 @@ def get_encoding(file):
     with open(file, 'rb') as f:  
         for line in f:
             if(len(line) > 10 ):
-                print(chardet.detect(line))
-                return chardet.detect(line)['encoding']  
+                if(chardet.detect(line)['confidence']> 0.8):
+                    return chardet.detect(line)['encoding']  
+    return None
 
 
 def clear_line(line):
