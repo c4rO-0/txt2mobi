@@ -115,6 +115,13 @@ class Book(object):
             print("-------unicode-------")
             lines = unicode_line(f.read())
             f.close()
+        # 说明
+        declearation = [
+            u'由c4r帮助转化为mobi格式.',
+            u'后台修改自ipconfiger的txt2mobi'
+        ]
+        lines=declearation+lines
+        
         print("--------初始化参量------")
         self.title_filter = title_filter
         self.chapters = []
@@ -122,6 +129,7 @@ class Book(object):
         self.process_lines(lines) 
         self.config = config
 
+        
 
         print("-------初始化结束-------")
 
@@ -312,15 +320,16 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
         :return:
         :rtype:
         """
+
         opf_file = """<?xml version="1.0" encoding="utf-8"?>
 <package unique-identifier="uid" xmlns:opf="http://www.idpf.org/2007/opf" xmlns:asd="http://www.idpf.org/asdfaf">
     <metadata>
         <dc-metadata  xmlns:dc="http://purl.org/metadata/dublin_core" xmlns:oebpackage="http://openebook.org/namespaces/oeb-package/1.0/">
-            <dc:Title>%(title)s-%(idx)s</dc:Title>
+            <dc:Title>%(title)s</dc:Title>
             <dc:Language>zh-cn</dc:Language>
             <dc:Creator>%(author)s</dc:Creator>
             <dc:Copyrights>%(author)s</dc:Copyrights>
-            <dc:Publisher>Alexander.Li</dc:Publisher>
+            <dc:Publisher>c4r team</dc:Publisher>
             <x-metadata>
                 <EmbeddedCover>%(cover)s</EmbeddedCover>
             </x-metadata>
@@ -345,7 +354,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
         """ % dict(
             title_name=u"目录",
             author=self.config.author,
-            title="%s-%s" % (self.config.title, idx) if self.book_count() > 1 else self.config.title,
+            title="%s-%s/%s" % (self.config.title, idx, self.book_count()) if self.book_count() > 1 else self.config.title,
             cover=self.config.cover_image,
             idx="%s" % idx
         )
