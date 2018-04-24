@@ -20,7 +20,7 @@ def init_project(working_dir, fileName):
     dir_path = working_dir
     print("working---->")
     print(working_dir)
-    book_name = fileName.split('.')[0]
+    book_name = fileName.rsplit('.')[0]
     rows = []
     rows.append(u'[txt2mobi]')
     rows.append(u'kindlegen=' + os.path.join(Txt2mobiPath,'resources','kindlegen'))
