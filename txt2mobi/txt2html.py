@@ -103,7 +103,8 @@ class Book(object):
     """
     书对象
     """
-    def __init__(self, working_dir, filename, title_filter):
+    def __init__(self, working_dir, filename, title_filter, Chapter_max_length):
+        self.ChapterMaxLength = Chapter_max_length
         print("------生成config--------")
         config = ProjectConfig(working_dir)
         print("-------统计行数-------")
@@ -119,6 +120,8 @@ class Book(object):
         # 找到章节
         self.process_lines(lines) 
         self.config = config
+
+
         print("-------初始化结束-------")
 
     def trim(self):
@@ -164,7 +167,7 @@ class Book(object):
         """
         if self.title_filter:
             strip_line = line.strip()
-            if 3 < len(strip_line) < 30:
+            if len(strip_line) < self.ChapterMaxLength:
                 if re.match(self.title_filter, strip_line):
                     return True
         else:
