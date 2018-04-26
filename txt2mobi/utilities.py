@@ -23,7 +23,7 @@ def init_project(working_dir, fileName):
     book_name = fileName.rsplit('.')[0]
     rows = []
     rows.append(u'[txt2mobi]')
-    rows.append(u'kindlegen=' + os.path.join(Txt2mobiPath,'resources','kindlegen'))
+    rows.append(u'kindlegen=' + os.path.join(Txt2mobiPath,'resources','kindlegen.exe'))
     rows.append(u'')
     rows.append(u'[book]')
     rows.append(u'cover-img=cover.png')
