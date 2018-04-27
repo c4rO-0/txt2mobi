@@ -105,7 +105,7 @@ def genTOC(title,working_dir,filename, ChapterMaxLength):
     #     return None, None
     TOC = book.gen_TOChtml()
     TOChtml_path = os.path.join(working_dir, 'project-TOC.html')
-    with open(TOChtml_path, 'w') as f:
+    with open(TOChtml_path, 'w', encoding='utf-8') as f:
         f.write(TOC)
         f.close()
     
@@ -125,14 +125,14 @@ def gen_project(book,title,working_dir,filename):
     for idx in range(1, book_count+1):
         try:
             opf_path = os.path.join(working_dir, 'project-%s.opf' % idx)
-            with open(opf_path, 'w') as f:
+            with open(opf_path, 'w', encoding='utf-8') as f:
                 f.write(book.gen_opf_file(idx))
                 f.close()
             print("opf文件生成完毕")
 
             # 生成ncx文件
             ncx_path = os.path.join(working_dir, 'toc-%s.ncx' % idx)
-            with open(ncx_path, 'w') as f:
+            with open(ncx_path, 'w', encoding='utf-8') as f:
                 f.write(book.gen_ncx(idx))
                 f.close()
             print("ncx文件生成完毕")
