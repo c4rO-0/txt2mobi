@@ -139,7 +139,7 @@ def gen_project(book,title,working_dir,filename):
 
             # 生成book.html
             book_path = os.path.join(working_dir, 'book-%s.html' % idx)
-            with open(book_path, 'w') as f:
+            with open(book_path, 'w', encoding='utf-8') as f:
                 f.write(book.gen_html_file(idx))
                 f.close()
             print("book-%s.html生成完毕" % idx)
