@@ -368,6 +368,9 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
         :return:
         :rtype:
         """
+
+        print("kindle 实际运行指令------------->")
+        print("%s %sproject-%s.opf" % (self.config.gen_command, self.config.working_dir+ os.sep, idx))
         return "%s %sproject-%s.opf" % (self.config.gen_command, self.config.working_dir+ os.sep, idx)
 
     def combineChapter(self, index):
