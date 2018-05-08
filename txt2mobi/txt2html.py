@@ -10,7 +10,7 @@ from math import ceil
 
 
 allowed = [u',', u'.', u"!", u"?", u":", u"*", u"[", u"]", u";", u"-", u"_", u"。", u"，", u"?", u"：",
-           u"；", u"【", u"】", u" ", u""]
+           u"；", u"【", u"】", u" ", u"", u"“", u"”"]
 
 english = u'qazxswedcvfrtgbnhyujmkiolpQAZXSWEDCVFRTGBNHYUJMKIOLP1234567890'
 
@@ -48,7 +48,7 @@ def unicode_line(file_content):
     error_lines = 0
     for idx, line in enumerate(lines):
         try:
-            result_lines.append(clear_line(line))
+            result_lines.append(line)
         except Exception as e:
             error_lines += 1
     if error_lines:
