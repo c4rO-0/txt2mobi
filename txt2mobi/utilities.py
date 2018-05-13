@@ -15,7 +15,7 @@ import shutil
 #     return os.getcwd()
 
 
-def init_project(working_dir, fileName):
+def init_project(working_dir, fileName, author = 'c4r' ):
     book_name = ''
     dir_path = working_dir
     print("working---->")
@@ -28,7 +28,7 @@ def init_project(working_dir, fileName):
     rows.append(u'[book]')
     rows.append(u'cover-img=cover.png')
     rows.append(u'title=%s' % book_name)
-    rows.append(u'author=c4r')
+    rows.append(u'author='+author)
     rows.append(u'max-chapter=1500')
     with open(os.path.join(working_dir, '.project.ini'), 'w') as f:
         f.write("\n".join([r for r in rows]))
