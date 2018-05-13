@@ -15,7 +15,7 @@ import shutil
 #     return os.getcwd()
 
 
-def init_project(working_dir, fileName, author = 'c4r' ):
+def init_project(working_dir, fileName, author = '' ):
     book_name = ''
     dir_path = working_dir
     print("working---->")

@@ -117,8 +117,9 @@ class Book(object):
             f.close()
         # 说明
         declearation = [
-            u'由c4r帮助转化为mobi格式.',
-            u'后台修改自ipconfiger的txt2mobi'
+            u'由c4r帮助转化为mobi格式. '+
+            u'后台修改自ipconfiger的txt2mobi. '+
+            u'在线转化txt请访问 : http://tool.papercomment.tech/'
         ]
         lines=declearation+lines
         
