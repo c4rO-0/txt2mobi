@@ -359,7 +359,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
             # 临时方案
             # 想要替换多个cover
             # cover= self.config.cover_image,
-            cover= self.config.cover_image,
+            cover= "cover-%s.png" % idx,
             idx="%s" % idx
         )
         return opf_file
