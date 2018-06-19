@@ -356,7 +356,10 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
             title_name=u"目录",
             author=self.config.author,
             title="%s-%s/%s" % (self.config.title, idx, self.book_count()) if self.book_count() > 1 else self.config.title,
-            cover=self.config.cover_image,
+            # 临时方案
+            # 想要替换多个cover
+            # cover= self.config.cover_image,
+            cover= self.config.cover_image,
             idx="%s" % idx
         )
         return opf_file
