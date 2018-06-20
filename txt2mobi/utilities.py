@@ -15,12 +15,12 @@ import shutil
 #     return os.getcwd()
 
 
-def init_project(working_dir, fileName):
+def init_project(working_dir, fileName, author = '' ):
     book_name = ''
     dir_path = working_dir
     print("working---->")
     print(working_dir)
-    book_name = fileName.rsplit('.')[0]
+    book_name = fileName.rsplit('.',1)[0]
     rows = []
     rows.append(u'[txt2mobi]')
     rows.append(u'kindlegen=' + os.path.join(Txt2mobiPath,'resources','kindlegen.exe'))
@@ -28,7 +28,7 @@ def init_project(working_dir, fileName):
     rows.append(u'[book]')
     rows.append(u'cover-img=cover.png')
     rows.append(u'title=%s' % book_name)
-    rows.append(u'author=c4r')
+    rows.append(u'author='+author)
     rows.append(u'max-chapter=1500')
     with open(os.path.join(working_dir, '.project.ini'), 'w') as f:
         f.write("\n".join([r for r in rows]))
