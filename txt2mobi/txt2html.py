@@ -279,8 +279,9 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
     </style>
 </head>
 <body>
-<a name="toc"/>
+<a name="toc">
 %(menu)s
+</a>
 <!-- Your book goes here -->
 %(content)s
 </body>
@@ -337,14 +338,13 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
         </dc-metadata>
     </metadata>
     <manifest>
-        <item id="toc" properties="nav" href="book-%(idx)s.html" media-type="application/xhtml+xml"/>
         <item id="content" media-type="application/xhtml+xml" href="book-%(idx)s.html"></item>
         <item id="cover-image" media-type="image/png" href="%(cover)s"/>
         <item id="ncx" media-type="application/x-dtbncx+xml" href="toc-%(idx)s.ncx"/>
+        <item id="toc" properties="nav" href="project-TOC-%(idx)s.html" media-type="application/xhtml+xml"/>
     </manifest>
     <spine toc="ncx">
         <itemref idref="cover-image"/>
-        <itemref idref="toc"/>
         <itemref idref="content"/>
     </spine>
     <guide>
@@ -394,13 +394,45 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                 self.chapters.pop(delIndex)
                 
                     
-    def gen_TOChtml(self):
+    def gen_TOChtml(self,idx=-1):
         """
         生成TOC html文件内容
         :return:
         :rtype:
         """
-        menavPoints="\n".join([ chapter.as_TOChtml() for chapter in self.chapters ])
+        
+        book_name = self.config.title
 
-        return menavPoints        
+        if(idx==-1):
+            menu="\n".join([ chapter.as_TOChtml() for chapter in self.chapters ])
+        else:
+
+            menu = self.gen_menu(idx)
+
+        data = dict(book_name=book_name, menu=menu)
+
+        html_base = """<!DOCTYPE html
+PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh" xml:lang="zh">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>%(book_name)s</title>
+    <style type="text/css">
+    p { margin-top: 1em; text-indent: 0em; }
+    h1 {margin-top: 1em}
+    h2 {margin: 2em 0 1em; text-align: center; font-size: 2.5em;}
+    h3 {margin: 0 0 2em; font-weight: normal; text-align:center; font-size: 1.5em; font-style: italic;}
+    .center { text-align: center; }
+    .pagebreak { page-break-before: always; }
+    </style>
+</head>
+<body>
+<a name="toc">
+%(menu)s
+</a>
+</body>
+</html>
+        """ % data
+        return html_base        
             

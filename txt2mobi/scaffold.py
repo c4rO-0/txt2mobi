@@ -124,6 +124,12 @@ def gen_project(book,title,working_dir,filename):
     book_count = book.book_count()
     for idx in range(1, book_count+1):
         try:
+            toc_path = os.path.join(working_dir, 'project-TOC-%s.html' % idx)
+            with open(toc_path, 'w', encoding='utf-8') as f:
+                f.write(book.gen_TOChtml(idx))
+                f.close()
+            print("TOC文件生成完毕")
+
             opf_path = os.path.join(working_dir, 'project-%s.opf' % idx)
             with open(opf_path, 'w', encoding='utf-8') as f:
                 f.write(book.gen_opf_file(idx))
