@@ -14,17 +14,45 @@ allowed = [u',', u'.', u"!", u"?", u":", u"*", u"[", u"]", u";", u"-", u"_", u"�
 
 english = u'qazxswedcvfrtgbnhyujmkiolpQAZXSWEDCVFRTGBNHYUJMKIOLP1234567890'
 
+
+def normalize_codec_name(chardet_name):
+    """
+    Normalizes chardet codec names to Python codec names.
+    :param chardet_name: chardet codec names
+    :return: Python codec names. See: https://docs.python.org/3.7/library/codecs.html#standard-encodings
+    """
+
+    python_name = chardet_name.lower().replace('iso-', 'iso').replace('-', '_')
+    python_name = codecs.lookup(python_name).name
+
+    # Since chardet only recognized all GB-based target_encoding as 'gb2312', the decoding will fail when the text file
+    # contains certain special charaters. To make it more special-character-tolerant, we should
+    # upgrade the target_encoding to 'gb18030', which is a character set larger than gb2312.
+    if python_name == 'gb2312':
+        return 'gb18030'
+
+    return python_name
+
 # 获取文件编码类型  
 def get_encoding(file):  
     # 二进制方式读取，获取字节数据，检测类型  
-    
+
+    n_line = 0
+    lines = bytes()
     with open(file, 'rb') as f:  
         for line in f:
-            if(len(line) > 10 ):
-                if(chardet.detect(line)['confidence']> 0.8):
-                    return chardet.detect(line)['encoding']  
-    return None
+            n_line += 1
+            lines = lines +  line
+            if(n_line >= 100 ):
+                break
+        # file_bytes = f.read()
 
+    chr_res = chardet.detect(lines)
+    if( not chr_res['encoding'] or chr_res['confidence'] < 0.8):
+        return None
+    else:
+        return normalize_codec_name(chr_res['encoding'] )
+    
 
 def clear_line(line):
     """
