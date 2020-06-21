@@ -90,3 +90,5 @@ ENV/
 
 # pyCharm project
 .idea
+
+resources/slogan.dat
