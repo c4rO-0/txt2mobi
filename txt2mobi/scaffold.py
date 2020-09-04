@@ -6,6 +6,7 @@ import shutil
 from txt2mobi.exceptions import EncodingError
 # from utilities import init_project
 from txt2html import Book
+import subprocess 
 
 
 
@@ -156,6 +157,14 @@ def gen_project(book,title,working_dir,filename):
     for idx in range(1, book_count + 1):
         print('--------生成执行命令-------------')
         print(book.gen_command(idx))
-        os.system(book.gen_command(idx))
-        src_path = os.path.join(working_dir, 'project-%s.mobi' % idx)
-        des_path = os.path.join(working_dir, '%s-%s.mobi' % (book.config.title, idx))
+
+        # os.system(book.gen_command(idx))
+
+        try:
+            output = subprocess.run(book.gen_command(idx), timeout=10*60) # 10 min max
+            # src_path = os.path.join(working_dir, 'project-%s.mobi' % idx)
+            # des_path = os.path.join(working_dir, '%s-%s.mobi' % (book.config.title, idx))
+        except subprocess.TimeoutExpired:
+            print('--------超时-------------')
+            raise
+

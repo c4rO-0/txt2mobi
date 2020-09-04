@@ -400,7 +400,8 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
         :return:
         :rtype:
         """
-        return "%s %sproject-%s.opf" % (self.config.gen_command, self.config.working_dir+ os.sep, idx)
+        # return "%s %sproject-%s.opf" % (self.config.gen_command, self.config.working_dir+ os.sep, idx)
+        return ["%s" % (self.config.gen_command), "%sproject-%s.opf" % (self.config.working_dir+ os.sep, idx)]
 
     def combineChapter(self, index):
         """
