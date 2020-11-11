@@ -157,8 +157,13 @@ class Book(object):
         # 找到章节
         self.process_lines(lines) 
         self.config = config
-
         
+        maxChapter = self.config.max_chapter
+        if(len(self.chapters) > maxChapter):
+            count = ceil(len(self.chapters) / float(maxChapter))
+            self.max_chapter_split = ceil( len(self.chapters) / float(count)  ) 
+        else:
+            self.max_chapter_split = self.config.max_chapter    
 
         print("-------初始化结束-------")
 
@@ -172,6 +177,11 @@ class Book(object):
         del self.chapters[:]
         self.chapters = trimed_chapters
 
+        maxChapter = self.config.max_chapter
+        if(len(self.chapters) > maxChapter):
+            count = ceil(len(self.chapters) / float(maxChapter))
+            self.max_chapter_split = ceil( len(self.chapters) / float(count)  )
+
     def book_count(self):
         """
         计算有几本书,因为太大了生成出来的文件有问题, 所以每1500章就切分生成一个mobi文件
@@ -179,7 +189,7 @@ class Book(object):
         :rtype:
         """
         # 向上取整
-        ct = ceil(len(self.chapters) / self.config.max_chapter)
+        ct = ceil(len(self.chapters) / self.max_chapter_split)
 
         return ct
 
@@ -191,8 +201,8 @@ class Book(object):
         :return:
         :rtype:
         """
-        start = (idx - 1) * int(self.config.max_chapter)
-        end = idx * int(self.config.max_chapter)
+        start = (idx - 1) * int(self.max_chapter_split)
+        end = idx * int(self.max_chapter_split)
         return start, end
 
     def __is_chapter_title(self, line):
@@ -254,6 +264,8 @@ class Book(object):
                     chapter.append_line(line)
         print("----process_lines-----")
         print(self.chapters[0].title)
+        
+
 
     def gen_menu(self, idx):
         """
